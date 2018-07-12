@@ -8,8 +8,13 @@ This app makes uses of [Electron Forge](https://github.com/electron-userland/ele
 ## How to Install
 
 ### Using the installer
+List of all releases is available at the [Releases](https://github.com/kvervo/electro-g/releases/) page.
 
-Download DMG from [Release](https://github.com/kvervo/electro-gcalendar/releases) page.
+Latest releases:
+
+* [MacOS](https://github.com/kvervo/electro-g/releases/download/0.1.0-alpha/Electro.G.Calendar-0.1.0-alpha.dmg)  
+* [Windows](https://github.com/kvervo/electro-g/releases/download/0.1.0-alpha/Electro.G.Calendar-0.1.0-alpha.exe)
+  
 
 ### Build it yourself
 
