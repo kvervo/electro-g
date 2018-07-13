@@ -1,7 +1,7 @@
 {
   "name": "electro-g",
   "productName": "Electro G Calendar",
-  "version": "0.1.0-alpha",
+  "version": "0.2.0-alpha",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
