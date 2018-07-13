@@ -10,44 +10,73 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 let mainWindow;
 
 // Menu Items Template
-// const template = [
-//   {
-//     label: 'Calendar',
-//     submenu: [
-//       {
-//         label: 'About Calendar',
-//         selector: 'orderFrontStandardAboutPanel:'
-//       },
-//       {
-//         type: 'separator'
-//       },
-//       {
-//         label: 'Hide Calendar',
-//         accelerator: 'CmdOrCtrl+H',
-//         click: function() {win.hide();}
-//       },
-//       {
-//         type: 'separator'
-//       },
-//       {
-//         label: 'Quit Calendar',
-//         accelerator: 'CmdOrCtrl+Q',
-//         click: function() {force_quit=true; app.quit();}
-//       },
-//     ]
-//   },
-//   {
-//     label: 'File',
-//     submenu: [
-//       {
-//         label: 'Save',
-//         accelerator: 'CmdOrCtrl+S'
-//       }
-//     ]
-//   }
-// ]
+const template = [
+  {
+    label: 'ElectroG',
+    submenu: [
+      {
+        label: 'About Calendar',
+        selector: 'orderFrontStandardAboutPanel:'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Hide Calendar',
+        accelerator: 'CmdOrCtrl+H',
+        click: function() {win.hide();}
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Quit Calendar',
+        accelerator: 'CmdOrCtrl+Q',
+        click: function() {force_quit=true; app.quit();}
+      },
+    ]
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      {
+        label: 'Undo',
+        accelerator: 'CmdOrCtrl+Z',
+        role: 'undo'
+      },
+      {
+        label: 'Redo',
+        accelerator: 'Shift+CmdOrCtrl+Z',
+        role: 'redo'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Cut',
+        accelerator: 'CmdOrCtrl+X',
+        role: 'cut'
+      },
+      {
+        label: 'Copy',
+        accelerator: 'CmdOrCtrl+C',
+        role: 'copy'
+      },
+      {
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        role: 'paste'
+      },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        role: 'selectall'
+      }
+    ]
+  },
+]
 
-// const menu = Menu.buildFromTemplate(template);
+const menu = Menu.buildFromTemplate(template);
 
 const createWindow = () => {
   // Create the browser window.
@@ -63,7 +92,7 @@ const createWindow = () => {
   // mainWindow.webContents.openDevTools();
   
   // Add Menu Items
-  // Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(menu);
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
