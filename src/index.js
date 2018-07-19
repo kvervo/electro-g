@@ -1,4 +1,5 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const electron = require('electron');
+const { app, BrowserWindow, Menu, shell } = electron;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -128,7 +129,7 @@ const template = [
     submenu: [
       {
         label: 'Eletro G on GitHub',
-        click: function() { require('electron').shell.openExternal('https://github.com/kvervo/electro-g') }
+        click: function() { shell.openExternal('https://github.com/kvervo/electro-g') }
       },
     ]
   }
@@ -148,9 +149,6 @@ const createWindow = () => {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
-  
-  // Add Menu Items
-  Menu.setApplicationMenu(menu);
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -160,7 +158,28 @@ const createWindow = () => {
     mainWindow = null;
   });
 
-  
+  mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options, additionalFeatures) => {
+    // Links in event description will throw two events:
+    //    (1) First event will open a new-windows with about:blank url
+    //    (2) Second event will open a new-windows with correct link url
+    // Hence, we hide first blank window
+    // Check for about:blank is important since there are _blank links we want to open in the app, like hangouts
+    if (frameName === '_blank' && url === "about:blank") {
+      options.show = false;
+    }
+    // Upon second event we find all hidden blank windows and destroy them
+    // only then open the url in external browser
+    if (frameName !== '_blank') {
+      const blankWindows = BrowserWindow.getAllWindows().filter(window => { return window.frameName === "_blank"});
+      blankWindows.forEach(window => {
+        window.destroy();
+      });
+      event.preventDefault();
+      shell.openExternal(url);
+  }});
+
+  // Add Menu Items
+  Menu.setApplicationMenu(menu);
 };
 
 // This method will be called when Electron has finished
