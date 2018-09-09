@@ -1,6 +1,6 @@
 const electron = require('electron');
-const { app, BrowserWindow, Menu, shell } = electron;
-
+const { app, BrowserWindow, Menu, shell, desktopCapturer } = electron;
+const { template } = require('./menuTemplatemenuTemplate');
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
@@ -10,146 +10,26 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-// Menu Items Template
-const template = [
-  {
-    label: 'ElectroG',
-    submenu: [
-      {
-        label: 'About Calendar',
-        selector: 'orderFrontStandardAboutPanel:'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Hide Calendar',
-        accelerator: 'CmdOrCtrl+H',
-        click: function() {win.hide();}
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Quit Calendar',
-        accelerator: 'CmdOrCtrl+Q',
-        click: function() {force_quit=true; app.quit();}
-      },
-    ]
-  },
-  {
-    label: 'Edit',
-    submenu: [
-      {
-        label: 'Undo',
-        accelerator: 'CmdOrCtrl+Z',
-        role: 'undo'
-      },
-      {
-        label: 'Redo',
-        accelerator: 'Shift+CmdOrCtrl+Z',
-        role: 'redo'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        label: 'Cut',
-        accelerator: 'CmdOrCtrl+X',
-        role: 'cut'
-      },
-      {
-        label: 'Copy',
-        accelerator: 'CmdOrCtrl+C',
-        role: 'copy'
-      },
-      {
-        label: 'Paste',
-        accelerator: 'CmdOrCtrl+V',
-        role: 'paste'
-      },
-      {
-        label: 'Select All',
-        accelerator: 'CmdOrCtrl+A',
-        role: 'selectall'
-      }
-    ]
-  },
-  {
-    label: 'View',
-    submenu: [
-      {
-        label: 'Reload',
-        accelerator: 'CmdOrCtrl+R',
-        click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.reload()
-        }
-      },
-      {
-        label: 'Toggle Full Screen',
-        accelerator: (function() {
-          if (process.platform == 'darwin')
-            return 'Ctrl+Command+F';
-          else
-            return 'F11';
-        })(),
-        click: function(item, focusedWindow) {
-          if (focusedWindow)
-            focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
-        }
-      },
-      {
-        label: 'Toggle Developer Tools',
-        accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-        click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-        }
-      },
-    ]
-  },
-  {
-    label: 'Window',
-    role: 'window',
-    submenu: [
-      {
-        label: 'Minimize',
-        accelerator: 'CmdOrCtrl+M',
-        role: 'minimize'
-      },
-      {
-        label: 'Close',
-        accelerator: 'CmdOrCtrl+W',
-        role: 'close'
-      },
-    ]
-  },
-  {
-    label: 'Help',
-    role: 'help',
-    submenu: [
-      {
-        label: 'Eletro G on GitHub',
-        click: function() { shell.openExternal('https://github.com/kvervo/electro-g') }
-      },
-    ]
-  }
-]
-
 const menu = Menu.buildFromTemplate(template);
+// const mainUrl = `https://calendar.google.com/calendar`;
+const loadUrl = `https://meet.google.com`;
+const loadOptions = {
+  // userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36',
+};
 
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 960,
+    titleBarStyle: 'customButtonsOnHover',
     webPreferences: {
-      nodeIntegration: false
-      
+      nodeIntegration: false,
     }
   });
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`https://calendar.google.com/calendar`);
+  mainWindow.loadURL(loadUrl, loadOptions);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
@@ -184,6 +64,8 @@ const createWindow = () => {
 
   // Add Menu Items
   Menu.setApplicationMenu(menu);
+  console.log(process.versions.electron);
+  console.log(process.versions.chrome);
 };
 
 // This method will be called when Electron has finished
